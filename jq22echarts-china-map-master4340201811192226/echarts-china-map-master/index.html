@@ -34,10 +34,45 @@
     var myChart = echarts.init(document.getElementById('china-map'));
     var oBack = document.getElementById("back");
 
-    var provinces = ['shanghai', 'hebei', 'shanxi', 'neimenggu', 'liaoning', 'jilin', 'heilongjiang', 'jiangsu', 'zhejiang', 'anhui', 'fujian', 'jiangxi', 'shandong', 'henan', 'hubei', 'hunan', 'guangdong', 'guangxi', 'hainan', 'sichuan', 'guizhou', 'yunnan', 'xizang', 'shanxi1', 'gansu', 'qinghai', 'ningxia', 'xinjiang', 'beijing', 'tianjin', 'chongqing', 'xianggang', 'aomen'];
+    var provinces = ['shanghai', 'hebei', 'shanxi', 'neimenggu', 'liaoning', 'jilin', 'heilongjiang', 'jiangsu',
+      'zhejiang', 'anhui', 'fujian', 'jiangxi', 'shandong', 'henan', 'hubei', 'hunan', 'guangdong', 'guangxi',
+      'hainan', 'sichuan', 'guizhou', 'yunnan', 'xizang', 'shanxi1', 'gansu', 'qinghai', 'ningxia', 'xinjiang',
+      'beijing', 'tianjin', 'chongqing', 'xianggang', 'aomen'
+    ];
 
-    var provincesText = ['上海', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '四川', '贵州', '云南', '西藏', '陕西', '甘肃', '青海', '宁夏', '新疆', '北京', '天津', '重庆', '香港', '澳门'];
-
+    var provincesText = ['上海', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北',
+      '湖南', '广东', '广西', '海南', '四川', '贵州', '云南', '西藏', '陕西', '甘肃', '青海', '宁夏', '新疆', '北京', '天津', '重庆', '香港', '澳门'
+    ];
+    var cityDate=[{
+      name:'阿里地区',
+      value:100
+    },{
+      name:'那曲地区',
+      value:100
+    },
+    {
+      name:'日喀则市',
+      value:100
+    },
+    {
+      name:'拉萨市',
+      value:100
+    },
+    {
+      name:'山南市',
+      value:100
+    },
+    {
+      name:'林芝市',
+      value:100
+    }
+    ,
+    {
+      name:'昌都市',
+      value:100
+    },
+    
+  ]
     var seriesData = [{
       name: '北京',
       value: 100
@@ -145,61 +180,63 @@
     oBack.onclick = function () {
       initEcharts("china", "中国");
     };
-
+    
     initEcharts("china", "中国");
-
+    
     // 初始化echarts
     function initEcharts(pName, Chinese_) {
-      var tmpSeriesData = pName === "china" ? seriesData : [];
-
+      var tmpSeriesData = pName === "china" ? seriesData : cityDate;
+      // console.log(tmpSeriesData, pName, 2222)
       var option = {
         title: {
           text: Chinese_ || pName,
           left: 'center'
         },
-          tooltip: {
-              trigger: 'item',
-              formatter: '{b}<br/>{c} (p / km2)'
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}<br/>{c} (p / km2)'
+        },
+        series: [{
+          name: Chinese_ || pName,
+          type: 'map',
+          mapType: pName,
+          roam: false, //是否开启鼠标缩放和平移漫游
+          data: tmpSeriesData,
+          top: "3%", //组件距离容器的距离
+          zoom: 1.1,
+          selectedMode: 'single',
+
+          label: {
+            normal: {
+              show: true, //显示省份标签
+              textStyle: {
+                color: "#fbfdfe"
+              } //省份标签字体颜色
+            },
+            emphasis: { //对应的鼠标悬浮效果
+              show: true,
+              textStyle: {
+                color: "#323232"
+              }
+            }
           },
-        series: [
-          {
-            name: Chinese_ || pName,
-            type: 'map',
-            mapType: pName,
-            roam: false,//是否开启鼠标缩放和平移漫游
-            data: tmpSeriesData,
-            top: "3%",//组件距离容器的距离
-              zoom:1.1,
-              selectedMode : 'single',
+          itemStyle: {
+            normal: {
+              borderWidth: .5, //区域边框宽度
+              borderColor: '#0550c3', //区域边框颜色
+              areaColor: "#4ea397", //区域颜色
 
-              label: {
-                  normal: {
-                      show: true,//显示省份标签
-                      textStyle:{color:"#fbfdfe"}//省份标签字体颜色
-                  },
-                  emphasis: {//对应的鼠标悬浮效果
-                      show: true,
-                      textStyle:{color:"#323232"}
-                  }
-              },
-              itemStyle: {
-                  normal: {
-                      borderWidth: .5,//区域边框宽度
-                      borderColor: '#0550c3',//区域边框颜色
-                      areaColor:"#4ea397",//区域颜色
+            },
 
-                  },
+            emphasis: {
+              borderWidth: .5,
+              borderColor: '#4b0082',
+              areaColor: "#ece39e",
+            }
+          },
+        }]
 
-                  emphasis: {
-                      borderWidth: .5,
-                      borderColor: '#4b0082',
-                      areaColor:"#ece39e",
-                  }
-              },
-          }
-        ]
-
-           };
+      };
 
       myChart.setOption(option);
 
@@ -207,8 +244,8 @@
 
       if (pName === "china") { // 全国时，添加click 进入省级
         myChart.on('click', function (param) {
-          console.log(param,'param--china');
-          console.log(param.name,'1111111111111111');
+          console.log(param, 'param--china');
+          console.log(param.name, '1111111111111111');
           // 遍历取到provincesText 中的下标  去拿到对应的省js
           for (var i = 0; i < provincesText.length; i++) {
             if (param.name === provincesText[i]) {
@@ -217,19 +254,21 @@
               break;
             }
           }
-            if (param.componentType === 'series') {
-                var provinceName =param.name;
-                $('#box').css('display','block');
-                $("#box-title").html(provinceName);
+          if (param.componentType === 'series') {
+            var provinceName = param.name;
+            $('#box').css('display', 'block');
+            $("#box-title").html(provinceName);
 
-            }
+          }
+         
         });
       } else { // 省份，添加双击 回退到全国
         myChart.on("dblclick", function () {
           initEcharts("china", "中国");
+          
         });
         myChart.on("click", function (params) {
-          console.log(params,33333)
+          console.log(params, 33333)
         });
       }
     }
@@ -246,14 +285,14 @@
     function loadBdScript(scriptId, url, callback) {
       var script = document.createElement("script");
       script.type = "text/javascript";
-      if (script.readyState) {  //IE
+      if (script.readyState) { //IE
         script.onreadystatechange = function () {
           if (script.readyState === "loaded" || script.readyState === "complete") {
             script.onreadystatechange = null;
             callback();
           }
         };
-      } else {  // Others
+      } else { // Others
         script.onload = function () {
           callback();
         };
