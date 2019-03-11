@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+  <title>横向柱状图</title>
+  
+  <script src="./js/jquery.min.js"></script>
+  <script type="text/javascript" src="./js/echarts.js"></script>
+</head>
+
+<body>
+  <div id="chart1" style="width:500px;height:500px;background: #cecece"></div>
+
+  <script>
+    var myChart = echarts.init(document.getElementById('chart1'));
+    var category = ['小王', '小李', '小赵', '小马', '小刘', '小张', '小齐'];
+    var barData = [163, 383, 431, 581, 1218, 2142, 3100];
+    var barData1 = ['10%', '11%', '12%','13%','14%','15%','10%'];
+    var option = {
+        title:{
+          text:"全国外呼量排行榜(年)",
+          left:"left"
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [{
+            type: 'value',
+            axisLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            },
+            
+        },
+        {
+          type: 'value',
+            axisLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            },
+            axisLabel: {
+            formatter:'{value}%'
+          }
+        }
+      ],
+        yAxis: {
+            type: 'category',
+            data: category,
+            splitLine: {show: false},
+            axisLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            },
+            offset: 10,
+            nameTextStyle: {
+                fontSize: 15
+            }
+        },
+        series: [
+            {
+                name: '数量',
+                type: 'bar',
+                data: barData,
+                barWidth: 14,
+                barGap: 10,
+                smooth: true,
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'right',
+                        offset: [5, -2],
+                        textStyle: {
+                            color: '#F68300',
+                            fontSize: 13
+                        }
+                    }
+                },
+                itemStyle: {
+                    emphasis: {
+                        barBorderRadius: 7
+                    },
+                    normal: {
+                        barBorderRadius: 7,
+                        color: new echarts.graphic.LinearGradient(
+                            0, 0, 1, 0,
+                            [
+                                {offset: 0, color: '#3977E6'},
+                                {offset: 1, color: '#37BBF8'}
+
+                            ]
+                        )
+                    }
+                }
+            }
+        ]
+    };
+    myChart.setOption(option);
+
+
+
+  </script>
+</body>
+
+</html>
